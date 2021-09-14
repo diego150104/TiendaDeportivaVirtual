@@ -12,12 +12,12 @@ public class UsuarioDao extends Conexion {
 	public void registrarPersona(UsuarioVo Usuario) {
 		try {
 			Conectar();
-			PreparedStatement sentencia = Conexion.prepareStatement("Insert into usuarios(cedula_usuario, email_usuario, nombre_usuario, contrase�a, usuario) values (?,?,?,?,?)");
+			PreparedStatement sentencia = Conexion.prepareStatement("Insert into usuarios(cedula_usuario, nombre_usuario, email_usuario, usuario, contraseña) values (?,?,?,?,?)");
 			sentencia.setLong(1, Usuario.getCedula_usuario());
-			sentencia.setString(2, Usuario.getEmail_usuario());
-			sentencia.setString(3, Usuario.getNombre_usuario());
-			sentencia.setString(4, Usuario.getContraseña());
-			sentencia.setString(5, Usuario.getUsuario());
+			sentencia.setString(2, Usuario.getNombre_usuario());
+			sentencia.setString(3, Usuario.getEmail_usuario());
+			sentencia.setString(4, Usuario.getUsuario());
+			sentencia.setString(5, Usuario.getContraseña());
 			sentencia.executeUpdate();
 			Desconectar();
 		} catch (Exception e) {
@@ -25,16 +25,16 @@ public class UsuarioDao extends Conexion {
 		}
 	}
 	
-	public void actualizarPersona(Long cedulaUsuario, UsuarioVo Usuario) {
+	public void actualizarPersona(UsuarioVo Usuario) {
 		try {
 			Conectar();
 			PreparedStatement sentencia = Conexion.prepareStatement("Update usuarios set email_usuario = ?, nombre_usuario = ?, contrase�a = ?, usuario = ? where cedula_usuario = ?");
 			
-			sentencia.setString(1, Usuario.getEmail_usuario());
-			sentencia.setString(2, Usuario.getNombre_usuario());
-			sentencia.setString(3, Usuario.getContraseña());
-			sentencia.setString(4, Usuario.getUsuario());
-			sentencia.setLong(5, cedulaUsuario);
+			sentencia.setString(1, Usuario.getNombre_usuario());
+			sentencia.setString(2, Usuario.getEmail_usuario());
+			sentencia.setString(3, Usuario.getUsuario());
+			sentencia.setString(4, Usuario.getContraseña());
+			sentencia.setLong(5, Usuario.getCedula_usuario());
 			sentencia.executeUpdate();
 			Desconectar();
 		} catch (Exception e) {
@@ -43,11 +43,10 @@ public class UsuarioDao extends Conexion {
 		
 	}
 	
-	public void eliminarPersona(Long cedulaUsuario, UsuarioVo Usuario) {
+	public void eliminarPersona(Long cedulaUsuario) {
 		try {
 			Conectar();
 			PreparedStatement sentencia = Conexion.prepareStatement("delete from usuarios where cedula_usuario = ?");
-			
 			sentencia.setLong(1, cedulaUsuario);
 			sentencia.executeUpdate();
 			Desconectar();
@@ -56,18 +55,19 @@ public class UsuarioDao extends Conexion {
 		}
 	}
 	
-	public List<UsuarioVo> consultarPersonas() {
+	public ArrayList<UsuarioVo> consultarPersona(long cedula_usuario) {
 		try {
-			List<UsuarioVo> Usuarios = new ArrayList();
+			ArrayList<UsuarioVo> Usuarios = new ArrayList();
 			Conectar();
-			PreparedStatement sentencia = Conexion.prepareStatement("select * from clientes");
+			PreparedStatement sentencia = Conexion.prepareStatement("select * from usuarios where cedula_usuario= ?");
+			sentencia.setLong(1, cedula_usuario);
 			ResultSet datos = sentencia.executeQuery();
 			while (datos.next()) {
 				UsuarioVo Usuario = new UsuarioVo();
 				Usuario.setCedula_usuario(datos.getLong("cedula_usuario"));
-				Usuario.setEmail_usuario(datos.getString("email_usuario"));
 				Usuario.setNombre_usuario(datos.getString("nombre_usuario"));
-				Usuario.setContraseña(datos.getString("contrase�a"));
+				Usuario.setEmail_usuario(datos.getString("email_usuario"));
+				Usuario.setContraseña(datos.getString("contraseña"));
 				Usuario.setUsuario(datos.getString("usuario"));
 				Usuarios.add(Usuario);
 			}
@@ -79,7 +79,7 @@ public class UsuarioDao extends Conexion {
 		}
 	}
 	
-	public UsuarioVo login(String Usuario, String Contraseña) {
+	public boolean login(String Usuario, String Contraseña) {
 		try {
 			UsuarioVo entrar = new UsuarioVo();
 			Conectar();
@@ -88,19 +88,13 @@ public class UsuarioDao extends Conexion {
 			sentencia.setString(2, Contraseña);
 			ResultSet datos = sentencia.executeQuery();
 			if (datos != null) {
-				entrar.setCedula_usuario(datos.getLong("cedula_usuario"));
-				entrar.setEmail_usuario(datos.getString("email_usuario"));
-				entrar.setNombre_usuario(datos.getString("nombre_usuario"));
-				entrar.setContraseña(datos.getString("contrase�a"));
-				entrar.setUsuario(datos.getString("usuario"));
-				Desconectar();
-				return entrar;
+				return true;
 			} else {
-				return null;
+				return false;
 			}
 		} catch (Exception e) {
 			System.out.println(e);
-			return null;
+			return false;
 		}
 	}
 }
