@@ -3,7 +3,9 @@ package com.DAO.TiendaDeportivaVirtual;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.List;
+
+import javax.swing.JOptionPane;
+
 import com.VO.TiendaDeportivaVirtual.UsuarioVo;
 
 
@@ -57,7 +59,7 @@ public class UsuarioDao extends Conexion {
 	
 	public ArrayList<UsuarioVo> consultarPersona(long cedula_usuario) {
 		try {
-			ArrayList<UsuarioVo> Usuarios = new ArrayList();
+			ArrayList<UsuarioVo> Usuarios = new ArrayList<UsuarioVo>();
 			Conectar();
 			PreparedStatement sentencia = Conexion.prepareStatement("select * from usuarios where cedula_usuario= ?");
 			sentencia.setLong(1, cedula_usuario);
@@ -79,22 +81,21 @@ public class UsuarioDao extends Conexion {
 		}
 	}
 	
-	public boolean login(String Usuario, String Contraseña) {
+	public void login(String Usuario, String Contraseña) {
 		try {
-			UsuarioVo entrar = new UsuarioVo();
 			Conectar();
-			PreparedStatement sentencia = Conexion.prepareStatement("select * from usuarios where usuario = ? and contrase�a = ?");
+			PreparedStatement sentencia = Conexion.prepareStatement("select * from usuarios where usuario = ? and contraseña = ?");
 			sentencia.setString(1, Usuario);
 			sentencia.setString(2, Contraseña);
 			ResultSet datos = sentencia.executeQuery();
 			if (datos != null) {
-				return true;
+				JOptionPane.showMessageDialog(null,"Bienvenido, ingreso exitoso"); 
+			Desconectar();
 			} else {
-				return false;
+				JOptionPane.showMessageDialog(null,"Error el usuario o contraseña no existen");
 			}
 		} catch (Exception e) {
 			System.out.println(e);
-			return false;
 		}
 	}
 }

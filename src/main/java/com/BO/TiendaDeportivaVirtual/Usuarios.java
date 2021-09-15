@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.DAO.TiendaDeportivaVirtual.UsuarioDao;
 import com.VO.TiendaDeportivaVirtual.UsuarioVo;
 
-import antlr.collections.List;
 
 @RestController
 public class Usuarios {
@@ -37,10 +36,10 @@ public class Usuarios {
 		return Dao.consultarPersona(cedula_usuario);
 	}
 	@RequestMapping("/login")
-	public boolean login(String Usuario, String Contraseña) 
+	public void login(String Usuario, String Contraseña) 
 	{
 		UsuarioDao Dao = new UsuarioDao();
-		return Dao.login(Usuario, Contraseña);
+		Dao.login(Usuario, Contraseña);
 		
 	}
 }

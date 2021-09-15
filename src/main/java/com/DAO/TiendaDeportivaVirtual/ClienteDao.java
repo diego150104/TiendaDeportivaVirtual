@@ -3,7 +3,6 @@ package com.DAO.TiendaDeportivaVirtual;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.List;
 import com.VO.TiendaDeportivaVirtual.ClienteVo;
 
 
@@ -55,9 +54,9 @@ public class ClienteDao extends Conexion {
 		}
 	}
 	
-	public List<ClienteVo> consultarPersonas() {
+	public ArrayList<ClienteVo> consultarPersonas() {
 		try {
-			List<ClienteVo> Personas = new ArrayList();
+			ArrayList<ClienteVo> Personas = new ArrayList<ClienteVo>();
 			Conectar();
 			PreparedStatement sentencia = Conexion.prepareStatement("select * from clientes");
 			ResultSet datos = sentencia.executeQuery();

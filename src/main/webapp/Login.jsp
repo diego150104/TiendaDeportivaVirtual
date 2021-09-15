@@ -9,8 +9,9 @@
 <% 
     Usuarios user =new Usuarios();
     UsuarioVo userVo=new UsuarioVo();
-    userVo.getUsuario(request.getParameter("usuario"));
-    userVo.getContraseña(request.getParameter("contraseña"))
+    userVo.setUsuario(request.getParameter("usuario"));
+    userVo.setContraseña(request.getParameter("contraseña"));
+    user.login(userVo.getUsuario(), userVo.getContraseña());
 %>
 <head>
 <title>Page Redirection</title>
