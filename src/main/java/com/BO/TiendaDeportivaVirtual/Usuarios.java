@@ -1,12 +1,13 @@
 package com.BO.TiendaDeportivaVirtual;
 
+import java.util.ArrayList;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.DAO.TiendaDeportivaVirtual.UsuarioDao;
 import com.VO.TiendaDeportivaVirtual.UsuarioVo;
 
-import antlr.collections.List;
 
 @RestController
 public class Usuarios {
@@ -24,22 +25,21 @@ public class Usuarios {
 		Dao.actualizarPersona(Usuario);	
 	}
 	@RequestMapping("eliminarUsuario")
-	public void eliminarPersona(UsuarioVo Usuario)
+	public void eliminarPersona(Long cedulaUsuario)
 	{
 		UsuarioDao Dao= new UsuarioDao();
-		Dao.eliminarPersona(Usuario);
+		Dao.eliminarPersona(cedulaUsuario);
 	}
 	@RequestMapping("/consultarUsuario")
-	public List<UsuarioVo>consultarPersonas()
-	{
+	public ArrayList<UsuarioVo> consultarPersona(long cedula_usuario){
 		UsuarioDao Dao= new UsuarioDao();
-		return Dao.consultarPersonas();
+		return Dao.consultarPersona(cedula_usuario);
 	}
 	@RequestMapping("/login")
-	public UsuarioVo login() 
+	public void login(String Usuario, String Contraseña) 
 	{
 		UsuarioDao Dao = new UsuarioDao();
-		return Dao.login();
+		Dao.login(Usuario, Contraseña);
 		
 	}
 }
